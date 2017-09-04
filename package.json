@@ -1,0 +1,24 @@
+{
+  "name": "bb8-controller",
+  "version": "1.0.0",
+  "description": "An electron app for controlling BB8 with TouchBar",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/varunkumar/bb8-controller",
+  "keywords": [
+    "BB8",
+    "Electron",
+    "WebBluetooth",
+    "TouchBar"
+  ],
+  "author": "Varunkumar Nagarajan",
+  "devDependencies": {
+    "electron": "^1.7.5",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0"
+  },
+  "dependencies": {}
+}
