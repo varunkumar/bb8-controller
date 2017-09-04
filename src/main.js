@@ -2,6 +2,7 @@
 const electron = require('electron');
 const pjson = require('../package.json');
 const path = require('path');
+const { loadTouchBar } = require('./touchbar');
 
 const {
   app,
@@ -48,6 +49,9 @@ const createWindow = () => {
 
   // create menu
   createMenu();
+
+  // create touchbar
+  loadTouchBar(mainWindow);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
