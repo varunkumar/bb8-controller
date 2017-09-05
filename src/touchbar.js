@@ -1,103 +1,53 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { TouchBar } = require('electron');
+const { TouchBar, nativeImage } = require('electron');
+const path = require('path');
+
+
+let mainWindow;
+let icon = nativeImage.createFromPath(path.join(__dirname, '../assets/icons/bb8.png'));
+icon = icon.resize({ width: 32, height: 32 });
 
 const {
   TouchBarLabel,
-  TouchBarButton,
   TouchBarSpacer,
-  TouchBarColorPicker
+  TouchBarColorPicker,
+  TouchBarSlider,
+  TouchBarPopover
 } = TouchBar;
 
-let spinning = false;
-
-// Reel labels
-const reel1 = new TouchBarLabel();
-const reel2 = new TouchBarLabel();
-const reel3 = new TouchBarLabel();
-
-// Spin result label
-const result = new TouchBarLabel();
-
-const getRandomValue = () => {
-  const values = ['🍒', '💎', '7️⃣', '🍊', '🔔', '⭐', '🍇', '🍀'];
-  return values[Math.floor(Math.random() * values.length)];
-};
-
-const updateReels = () => {
-  reel1.label = getRandomValue();
-  reel2.label = getRandomValue();
-  reel3.label = getRandomValue();
-};
-
-const finishSpin = () => {
-  const uniqueValues = new Set([reel1.label, reel2.label, reel3.label]).size;
-  if (uniqueValues === 1) {
-    // All 3 values are the same
-    result.label = '💰 Jackpot!';
-    result.textColor = '#FDFF00';
-  } else if (uniqueValues === 2) {
-    // 2 values are the same
-    result.label = '😍 Winner!';
-    result.textColor = '#FDFF00';
-  } else {
-    // No values are the same
-    result.label = '🙁 Spin Again';
-    result.textColor = null;
-  }
-  spinning = false;
-};
-
-// Spin button
-const spin = new TouchBarButton({
-  label: '🎰 Spin',
-  backgroundColor: '#7851A9',
-  click: () => {
-    // Ignore clicks if already spinning
-    if (spinning) {
-      return;
+const colorPicker = new TouchBarColorPicker({
+  change: (color) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('bb8:color', color);
     }
-
-    spinning = true;
-    result.label = '';
-
-    let timeout = 10;
-    const spinLength = 4 * 1000; // 4 seconds
-    const startTime = Date.now();
-
-    const spinReels = () => {
-      updateReels();
-
-      if (Date.now() - startTime >= spinLength) {
-        finishSpin();
-      } else {
-        // Slow down a bit on each spin
-        timeout *= 1.1;
-        setTimeout(spinReels, timeout);
-      }
-    };
-
-    spinReels();
   }
 });
 
+const popover = new TouchBarPopover({
+  label: 'Roll',
+  icon,
+  items: [
+    new TouchBarSlider({
+      label: 'Roll Me',
+      change: (newValue) => {
+        mainWindow.webContents.send('bb8:roll', newValue);
+      },
+      minValue: 0,
+      maxValue: 360
+    })
+  ]
+});
+
 const touchBar = new TouchBar([
-  spin,
-  new TouchBarSpacer({ size: 'large' }),
-  reel1,
+  new TouchBarLabel({ label: 'BB-8 Controller' }),
   new TouchBarSpacer({ size: 'small' }),
-  reel2,
+  popover,
   new TouchBarSpacer({ size: 'small' }),
-  reel3,
-  new TouchBarSpacer({ size: 'large' }),
-  result,
-  new TouchBarColorPicker({
-    change: (color) => {
-      console.log(color);
-    }
-  })
-]);
+  colorPicker
+], null);
 
 const loadTouchBar = (window) => {
+  mainWindow = window;
   window.setTouchBar(touchBar);
 };
 
