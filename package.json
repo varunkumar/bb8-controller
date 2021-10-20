@@ -17,6 +17,7 @@
   ],
   "author": "Varunkumar Nagarajan",
   "devDependencies": {
+    "@xmldom/xmldom": "^0.7.5",
     "electron": "^11.5.0",
     "electron-packager": "^15.2.0",
     "eslint": "^4.18.2",
