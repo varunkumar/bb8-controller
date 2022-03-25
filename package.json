@@ -31,7 +31,7 @@
     "deep-extend": "^0.5.1",
     "extend": "^3.0.2",
     "hoek": "^4.2.1",
-    "minimist": "^1.2.3",
+    "minimist": "^1.2.6",
     "sshpk": "^1.13.2",
     "stringstream": "^0.0.6"
   }
