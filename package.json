@@ -17,7 +17,7 @@
   ],
   "author": "Varunkumar Nagarajan",
   "devDependencies": {
-    "@xmldom/xmldom": "^0.7.5",
+    "@xmldom/xmldom": "^0.8.3",
     "ajv": "~6.12.3",
     "electron": "^15.5.5",
     "electron-packager": "^15.2.0",
